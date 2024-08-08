@@ -20,3 +20,37 @@ Your manager has also requested you to prepare a 5 minute presentation explainin
 3. build datasets and clean for given data in BigQuery. 
 4. connect BigQuery to Tableau Desktop to build dashboards
 5. upload dashboard on Tableau Public along with GitHub repo.
+
+## data pre-processing and ingestion
+- assign data types
+- standardize naming formats to snake case
+- ingest into Google Cloud Storage bucket
+
+## data exploration and cleaning 
+- ingest data from GCS bucket into BigQuery 
+
+takeaways: 
+- a lot of duplicated data
+Volume: 
+- there are negative values for return quantity. further exploration suggests that these might be accummulated units that fail quality control over a long period of time, hence treated as positive return quantity. 
+
+Hours: 
+- several Team values have different naming conventions. 
+- there are negative hours charged values
+
+Cleaning: 
+Volume:
+- negative return_qty values are converted to positive.
+- convert fiscal_period from MM-yy to start date of the month
+- aggregate data so that the level of detail is (part_number, fiscal_date)
+
+Hours:
+- negative hours_charged values are converted to 0. 
+- team ids are standardized to be AA_AAAA
+- aggregate so that the final level of detail is (fiscal_date, part_number, team_id)
+
+## final data sources
+since the stakeholders would be manufacturing team managers, each of whom manage one team. 
+we left join the aggregated hours with aggregated volume table to retain all team_id. 
+
+join based on fiscal_date and part_number

@@ -11,8 +11,8 @@ with volume_fiscal_period_adj as (
     date(fiscal_date) as fiscal_date,
     part_number, 
     completed_qty,
-    case when return_qty  < 0 then 0 else return_qty end as return_qty,
-    case when scrap_qty < 0 then 0 else scrap_qty end as scrap_qty,
+    case when return_qty  < 0 then return_qty*-1 else return_qty end as return_qty,
+    case when scrap_qty < 0 then scrap_qty*-1 else scrap_qty end as scrap_qty,
     PARSE_DATE('%b-%y', fiscal_period) AS fiscal_period_start_date
   from `cochlear-technical-challenge.manufacturing.stg_volume`
 )

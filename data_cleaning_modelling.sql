@@ -8,11 +8,11 @@ with volume_fiscal_period_adj as (
     fiscal_year,
     fiscal_period,
     fiscal_week,
-    fiscal_date,
+    date(fiscal_date) as fiscal_date,
     part_number, 
     completed_qty,
-    return_qty,
-    scrap_qty,
+    case when return_qty  < 0 then 0 else return_qty end as return_qty,
+    case when scrap_qty < 0 then 0 else scrap_qty end as scrap_qty,
     PARSE_DATE('%b-%y', fiscal_period) AS fiscal_period_start_date
   from `cochlear-technical-challenge.manufacturing.stg_volume`
 )
@@ -51,7 +51,7 @@ with volume_fiscal_period_adj as (
     fiscal_year,
     date(fiscal_period) as fiscal_period_start_date,
     fiscal_week,
-    fiscal_date,
+    date(fiscal_date) as fiscal_date,
     replace(team, '-', '_') as team_id,
     part_number, 
     case when hours_charged < 0 then 0 else hours_charged end as hours_charged
